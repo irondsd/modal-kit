@@ -84,9 +84,9 @@ Create the modal using `createModal`:
 
 ```tsx
 import { createModal } from '@irondsd/modal-kit';
-import MyModalContent from './MyModalContent';
 
-const [MyModal, openMyModal] = createModal('MyModal', MyModalContent);
+// Use dynamic import for lazy loading
+const [MyModal, openMyModal] = createModal('MyModal', () => import('./MyModalContent'));
 
 // Export both the component and the open function
 export { MyModal, openMyModal };
@@ -144,7 +144,7 @@ Creates a modal registration and returns a tuple with a component and open funct
 
 **Parameters:**
 - `name`: Unique identifier for the modal
-- `component`: Your modal component (must accept `closeModal` prop)
+- `loader`: Function that returns a Promise resolving to the component (e.g. `() => import('./MyComponent')`)
 
 **Returns:**
 - `[ConnectComponent, openFunction]`: A tuple containing:
@@ -152,7 +152,8 @@ Creates a modal registration and returns a tuple with a component and open funct
   - `openFunction`: Function to open the modal from anywhere
 
 ```tsx
-const [MyModalComponent, openMyModal] = createModal('MyModal', MyModalContent);
+// Pass a loader function that returns a Promise resolving to the component
+const [MyModalComponent, openMyModal] = createModal('MyModal', () => import('./MyModalContent'));
 ```
 
 ### `useModal({ overlayClosable, closeModal })`
@@ -257,7 +258,8 @@ const ConfirmModalContent: FC<ConfirmModalProps> = ({
   );
 };
 
-const [ConfirmModal, openConfirmModal] = createModal('ConfirmModal', ConfirmModalContent);
+const [ConfirmModal, openConfirmModal] = createModal('ConfirmModal', () => Promise.resolve({ default: ConfirmModalContent }));
+// Note: In a real app, you would use: () => import('./ConfirmModalContent')
 
 export { ConfirmModal, openConfirmModal };
 
@@ -360,9 +362,9 @@ Works in all modern browsers that support:
 
 ## Note on Lazy Loading
 
-Currently, modals are **lazy-mounted** - they are included in your bundle and loaded with the page, but they don't get rendered (mounted to the DOM) until `openModal()` is called.
+Modals are **fully lazy-loaded**. The modal content is fetched from the server only when `openModal()` is called (or when the component is rendered), reducing the initial bundle size.
 
-In future versions, we plan to implement **fully lazy-loadable modals**, where the modal content itself will be fetched from the server only when `openModal()` is called, further reducing bundle size and improving initial page load performance. This feature is still in planning stages.
+You must pass a loader function (like `() => import('./MyComponent')`) to `createModal` instead of the component directly.
 
 ## License
 

@@ -5,13 +5,12 @@ import { useModalContext } from './ModalContext';
 
 export const createModal = <P extends object>(
   name: string,
-  component: ComponentType<P & { closeModal: (withOnClose?: boolean) => void }>,
+  loader: () => Promise<{ default: ComponentType<P & { closeModal: (withOnClose?: boolean) => void }> }>,
 ): [React.ComponentType<{}>, (props?: Omit<P, 'closeModal'> & OpenModalParams) => void] => {
   
-  // 1. Create a Lazy wrapper around the existing component.
-  // Note: Since 'component' is passed by value, the file is already loaded in the bundle.
-  // This 'lazy' ensures React delays the MOUNTING of the component until rendered.
-  const LazyComponent = lazy(async () => ({ default: component }));
+  // 1. Create a Lazy wrapper using the loader function.
+  // This enables true code splitting: the chunk is only fetched when this component is rendered.
+  const LazyComponent = lazy(loader);
 
   // 2. The Modal Wrapper
   // We use createElement instead of JSX.
