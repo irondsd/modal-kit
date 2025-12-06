@@ -1,3 +1,5 @@
+'use client';
+
 import { createElement, lazy, Suspense, useEffect } from 'react';
 import type { ComponentType, FC } from 'react';
 import type { OpenModalParams } from './ModalContext';

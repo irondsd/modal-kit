@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback, useEffect, type MouseEvent } from 'react';
 import { useUniqueId } from './useUniqueId';
 import TrapFocus from '@locmod/trap-focus';
