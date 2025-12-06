@@ -80,15 +80,13 @@ export default MyModalContent;
 
 ### 3. Register and Use Your Modal
 
-Create the modal using `createModal`:
+In your modal's `index.ts` file:
 
 ```tsx
 import { createModal } from '@irondsd/modal-kit';
 
-// Use dynamic import for lazy loading
 const [MyModal, openMyModal] = createModal('MyModal', () => import('./MyModalContent'));
 
-// Export both the component and the open function
 export { MyModal, openMyModal };
 ```
 
@@ -152,7 +150,7 @@ Creates a modal registration and returns a tuple with a component and open funct
   - `openFunction`: Function to open the modal from anywhere
 
 ```tsx
-// Pass a loader function that returns a Promise resolving to the component
+// In MyModal/index.ts
 const [MyModalComponent, openMyModal] = createModal('MyModal', () => import('./MyModalContent'));
 ```
 
@@ -219,7 +217,9 @@ body.body-scroll-frozen {
 ### Example 1: Modal with Custom Props
 
 ```tsx
+// @/modals/ConfirmModal/ConfirmModal.tsx
 'use client';
+
 import type { FC } from 'react';
 import { createModal, useModal } from '@irondsd/modal-kit';
 
@@ -230,12 +230,7 @@ type ConfirmModalProps = {
   closeModal: (withOnClose?: boolean) => void;
 };
 
-const ConfirmModalContent: FC<ConfirmModalProps> = ({
-  title,
-  message,
-  onConfirm,
-  closeModal,
-}) => {
+export default function ConfirmModal({ title, message, onConfirm, closeModal }: ConfirmModalProps) {
   const { handleOverlayClick, handleModalClick, trapFocusId } = useModal({
     overlayClosable: false,
     closeModal,
@@ -257,13 +252,19 @@ const ConfirmModalContent: FC<ConfirmModalProps> = ({
     </div>
   );
 };
+```
 
-const [ConfirmModal, openConfirmModal] = createModal('ConfirmModal', () => Promise.resolve({ default: ConfirmModalContent }));
-// Note: In a real app, you would use: () => import('./ConfirmModalContent')
+```tsx
+// @/modals/ConfirmModal/index.ts
+const [ConfirmModal, openConfirmModal] = createModal('ConfirmModal', () => import('./ConfirmModal'));
 
 export { ConfirmModal, openConfirmModal };
+```
 
-// Usage:
+```ts
+import { openConfirmModal } from '@/modals/ConfirmModal'
+
+// open it like that
 openConfirmModal({
   title: 'Delete Item',
   message: 'Are you sure?',
