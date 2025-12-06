@@ -80,7 +80,8 @@ export default MyModalContent;
 
 ### 3. Register and Use Your Modal
 
-```tsx filename="@/modals/MyModal/index.ts"
+```tsx
+// @/modals/MyModal/index.ts
 "use client"
 
 import { createModal } from '@irondsd/modal-kit';
@@ -150,7 +151,8 @@ Creates a modal registration and returns a tuple with a component and open funct
   - `ConnectComponent`: Component to register the modal (place in your root layout)
   - `openFunction`: Function to open the modal from anywhere
 
-```tsx filename="@/modals/MyModal/index.ts"
+```tsx
+// @/modals/MyModal/index.ts
 const [MyModalComponent, openMyModal] = createModal('MyModal', () => import('./MyModalContent'));
 ```
 
@@ -216,7 +218,8 @@ body.body-scroll-frozen {
 
 ### Example 1: Modal with Custom Props
 
-```tsx filename="@/modals/ConfirmModal/ConfirmModal.tsx"
+```tsx
+// @/modals/ConfirmModal/ConfirmModal.tsx
 'use client';
 
 import type { FC } from 'react';
@@ -253,7 +256,8 @@ export default function ConfirmModal({ title, message, onConfirm, closeModal }: 
 };
 ```
 
-```tsx filename="@/modals/ConfirmModal/index.ts"
+```tsx
+// @/modals/ConfirmModal/index.ts
 "use client"
 
 import { createModal } from '@irondsd/modal-kit';
