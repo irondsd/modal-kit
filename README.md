@@ -80,15 +80,16 @@ export default MyModalContent;
 
 ### 3. Register and Use Your Modal
 
-In your modal's `index.ts` file:
+```tsx filename="@/modals/MyModal/index.ts"
+"use client"
 
-```tsx
 import { createModal } from '@irondsd/modal-kit';
 
 const [MyModal, openMyModal] = createModal('MyModal', () => import('./MyModalContent'));
-
 export { MyModal, openMyModal };
 ```
+
+**⚠️ Important: The `"use client"` directive is required** (when using Next.js App Router or similar frameworks with Server/Client Component boundaries). The `createModal` function uses React hooks internally, so it must be marked as a client component. Without this directive, you'll get the error: `Attempted to call createModal() from the server but createModal is on the client.`
 
 ### 4. Register the Modal and Open It
 
@@ -149,8 +150,7 @@ Creates a modal registration and returns a tuple with a component and open funct
   - `ConnectComponent`: Component to register the modal (place in your root layout)
   - `openFunction`: Function to open the modal from anywhere
 
-```tsx
-// In MyModal/index.ts
+```tsx filename="@/modals/MyModal/index.ts"
 const [MyModalComponent, openMyModal] = createModal('MyModal', () => import('./MyModalContent'));
 ```
 
@@ -216,8 +216,7 @@ body.body-scroll-frozen {
 
 ### Example 1: Modal with Custom Props
 
-```tsx
-// @/modals/ConfirmModal/ConfirmModal.tsx
+```tsx filename="@/modals/ConfirmModal/ConfirmModal.tsx"
 'use client';
 
 import type { FC } from 'react';
@@ -254,10 +253,12 @@ export default function ConfirmModal({ title, message, onConfirm, closeModal }: 
 };
 ```
 
-```tsx
-// @/modals/ConfirmModal/index.ts
-const [ConfirmModal, openConfirmModal] = createModal('ConfirmModal', () => import('./ConfirmModal'));
+```tsx filename="@/modals/ConfirmModal/index.ts"
+"use client"
 
+import { createModal } from '@irondsd/modal-kit';
+
+const [ConfirmModal, openConfirmModal] = createModal('ConfirmModal', () => import('./ConfirmModal'));
 export { ConfirmModal, openConfirmModal };
 ```
 
